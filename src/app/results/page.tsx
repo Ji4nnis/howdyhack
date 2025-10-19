@@ -5,10 +5,9 @@ import Image from "next/image";
 
 export default function Results() {
   const [output, setOutput] = useState("Generating your perfect playlist...");
-  const [answers, setAnswers] = useState<any>(null); // typed loosely for JSON parse safety
+  const [answers, setAnswers] = useState<any>(null);
 
   useEffect(() => {
-    // ✅ Only access localStorage on the client
     if (typeof window !== "undefined") {
       const storedAnswers = localStorage.getItem("quizAnswers");
       if (storedAnswers) {
@@ -25,7 +24,7 @@ export default function Results() {
   }, []);
 
   useEffect(() => {
-    if (!answers) return; // wait for answers to load
+    if (!answers) return;
 
     const prompt = `
       Use Spotify data and questionnaire responses to generate a playlist 
@@ -34,7 +33,7 @@ export default function Results() {
       ${JSON.stringify(answers)}.
       Please return JSON in this format:
       {"recommendations": ["Song - Artist", "Song - Artist", ...]} 
-      Take into account the length of time the skateboarder will be skating.
+      Take into account the length of time the skateboarder will be skating. ONE LINE OF TEXT ONLY PLEASE. ALSO IF IT EXCEEDS 13 songs, only show 12 songs, and END WITH "... and more! (you're skating for too long!!!)" 
     `;
 
     const generateText = async () => {
@@ -52,7 +51,6 @@ export default function Results() {
           return;
         }
 
-        // ✅ Safely handle both stringified and parsed outputs
         const playlist =
           typeof data.output === "string" ? JSON.parse(data.output) : data.output;
 
@@ -77,8 +75,7 @@ export default function Results() {
 
   return (
     <div className='col-start col-span-3 row-start row-span-3'>
-            <img src={"/Radical.png"} className='object-cover absolute z-[-10] bkg'/>
-
+      <img src={"/Radical.png"} className='object-cover absolute z-[-10] bkg'/>
       <div
         className="absolute z-10 text-center text-white drop-shadow-lg max-w-2xlg"
         style={{ top: "30%", right: "10%", left: "40%" }}
@@ -87,12 +84,11 @@ export default function Results() {
           You have really gnarly taste, dude! I thought you’d enjoy some awesome, groovy music. Check this out:
         </p>
       </div>
-
       <div
         className="absolute z-10 text-center drop-shadow-lg w-full"
-        style={{ bottom: "15%", left: "50%", transform: "translateX(-50%)" }}
+        style={{ bottom: "15%", top: "57%" }}
       >
-        <pre className="whitespace-pre-line text-base resultBody-text leading-relaxed">
+        <pre className="whitespace-pre-line mono text-lg leading-relaxed">
           {output}
         </pre>
       </div>
