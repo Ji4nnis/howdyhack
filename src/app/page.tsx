@@ -6,7 +6,7 @@ export default function Home() {
   const [output, setOutput] = useState("Click to generate playlist idea...");
 
   const prompt =
-    "Use Spotify data and questionnaire responses to generate a playlist with the perfect vibe for this skater.";
+    "Use Spotify data and questionnaire responses to generate a playlist with the perfect vibe for this skater.You are an assistant that generates JSON. You always return JSON with no additional text. Please Generate a list of 5 songs in JSON format. The songs should relate to this image. Use the format like this example Example: {'recommendations': ['Song - Artist', 'Song - Artist', ...]}.";
 
   const generateText = async () => {
     setOutput(" Generating your perfect playlist...");
@@ -26,7 +26,17 @@ export default function Home() {
       }
 
       if (response.ok) {
-        setOutput(data.output);
+        try {
+          // Parse the output as JSON if it's a string
+          const playlist = typeof data.output === 'string' ? JSON.parse(data.output) : data.output;
+          if (playlist.recommendations && Array.isArray(playlist.recommendations)) {
+            setOutput(playlist.recommendations.join('\n'));
+          } else {
+            setOutput('Invalid response format. Expected {recommendations: [...]}');
+          }
+        } catch (e) {
+          setOutput('Error parsing playlist: ' + data.output);
+        }
       } else {
         setOutput(`Error: ${data.error}`);
       }
@@ -49,3 +59,4 @@ export default function Home() {
     </main>
   );
 }
+

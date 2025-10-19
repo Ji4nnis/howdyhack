@@ -11,6 +11,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+import './globals.css';
+import { Seymour_One } from 'next/font/google';
+
+const seymour_One = Seymour_One({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: '400',
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +29,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>, ) {
   return (
     <html lang="en">
       <head><link href="https://fonts.cdnfonts.com/css/docallisme-on-street" rel="stylesheet"/>
@@ -31,7 +39,7 @@ export default function RootLayout({
         </head>
       
       <body>
-        {children}
+          {children}
       </body>
     </html>
   );

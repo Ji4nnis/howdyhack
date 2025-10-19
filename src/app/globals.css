@@ -24,6 +24,7 @@
     --color-4: #2DB9FB;
     --color-5: #7572BB;
     --color-6: #090c0b;
+    --color-7: #FD31B5;
   }
 }
 
@@ -36,20 +37,19 @@ body {
 .title {
   display: grid;
   place-items: center;
-  z-index: 2;
+  z-index:1;
   font-size: 100;
   color: var(--color-3);
   font-family: 'DOCALLISME ON STREET', sans-serif;
-
-  
 }
 
 
 .heading {
   display: grid;
   justify-content: center;
-  z-index: 1;
+  z-index: 2;
   font-size: 25;
+  font-weight: lighter;
   font-family: "Rubik Spray Paint", system-ui;
 
   color: var(--color-1);
@@ -69,4 +69,31 @@ body {
   margin: 0;
   cursor: pointer;
   outline: none; 
+}
+select,
+option {
+  color: #000000 !important;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  background-color: white;
+}
+/* QUESTION STYLING */
+.question-text {
+  color: #0C415C;
+  font-size: 20px;
+  font-family: "Rubik Spray Paint", system-ui;
+  font-weight: normal;
+}
+
+.resultBody-text {
+  font-size: 40px;
+  font-family: "mono", system-ui;
+  font-weight: normal;
+}
+
+/* DROPDOWN FONT STYLE */
+.dropdown-text {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  color: #000000;
 }

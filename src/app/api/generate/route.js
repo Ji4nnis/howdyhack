@@ -1,49 +1,72 @@
-"use client"
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
 
-import { useState } from "react"
+export async function POST(req) {
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+    const { prompt } = await req.json();
 
-export default function Home() {
-  const [output, setOutput] = useState("Click to generate playlist idea...")
-  const prompt =
-    "Use Spotify data and questionnaire responses to generate a playlist with the perfect vibe for this skater."
-
-  const generateText = async () => {
-    setOutput("🎧 Generating your perfect playlist...")
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      })
-
-      let data
-      try {
-        data = await response.json()
-      } catch {
-        setOutput("Server returned invalid JSON.")
-        return
-      }
-
-      if (response.ok) {
-        setOutput(data.output)
-      } else {
-        setOutput(`Error: ${data.error}`)
-      }
-    } catch (error) {
-      console.error(error)
-      setOutput("Something went wrong.")
+    if (!prompt) {
+      return NextResponse.json({ error: "Prompt is required." }, { status: 400 });
     }
+
+    const result = await model.generateContent(prompt);
+    const output = result.response.text();
+
+    return NextResponse.json({ output });
+  } catch (error) {
+    console.error("Error generating content:", error);
+    return NextResponse.json(
+      { error: "Failed to generate content." },
+      { status: 500 }
+    );
   }
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <h1 className="text-3xl font-bold mb-4">🎵 SkateBeatz</h1>
-      <button
-        onClick={generateText}
-        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-      >
-        Generate Playlist
-      </button>
-      <p className="mt-6 text-center max-w-xl">{output}</p>
-    </main>
-  )
 }
+
+
+/*import { questionSchema, questionsSchema } from "@/lib/schemas";
+import { google } from "@ai-sdk/google";
+import { streamObject } from "ai";
+
+export const maxDuration = 60;
+
+export async function POST(req: Request) {
+  const { files } = await req.json();
+  const firstFile = files[0].data;
+
+  const result = streamObject({
+    model: google("gemini-1.5-pro-latest"),
+    messages: [
+      {
+        role: "system",
+        content:
+          "Using this data from Spotify and questionnaire responses to generate a playlist with the perfect vibe for this skateboarder. You are an assistant that generates JSON. You always return JSON with no additional text. Please Generate a list of the appropriate number of songs in JSON format. The songs should relate to this image. Use the format like this example Example: {"recommendations": ["Song - Artist", "Song - Artist", ...]}.",
+      },
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: "Create a list of songs for a playlist based on this ",
+          },
+          {
+            type: "file",
+            data: firstFile,
+            mimeType: "application/pdf",
+          },
+        ],
+      },
+    ],
+    schema: questionSchema,
+    output: "array",
+    onFinish: ({ object }) => {
+      const res = questionsSchema.safeParse(object);
+      if (res.error) {
+        throw new Error(res.error.errors.map((e) => e.message).join("\n"));
+      }
+    },
+  });
+
+  return result.toTextStreamResponse();
+}*/

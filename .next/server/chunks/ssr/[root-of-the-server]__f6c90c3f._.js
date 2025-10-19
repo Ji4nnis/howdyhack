@@ -19,7 +19,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 function Home() {
     const [output, setOutput] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("Click to generate playlist idea...");
-    const prompt = "Use Spotify data and questionnaire responses to generate a playlist with the perfect vibe for this skater.";
+    const prompt = "Use Spotify data and questionnaire responses to generate a playlist with the perfect vibe for this skater.You are an assistant that generates JSON. You always return JSON with no additional text. Please Generate a list of 5 songs in JSON format. The songs should relate to this image. Use the format like this example Example: {'recommendations': ['Song - Artist', 'Song - Artist', ...]}.";
     const generateText = async ()=>{
         setOutput(" Generating your perfect playlist...");
         try {
@@ -40,7 +40,17 @@ function Home() {
                 return;
             }
             if (response.ok) {
-                setOutput(data.output);
+                try {
+                    // Parse the output as JSON if it's a string
+                    const playlist = typeof data.output === 'string' ? JSON.parse(data.output) : data.output;
+                    if (playlist.recommendations && Array.isArray(playlist.recommendations)) {
+                        setOutput(playlist.recommendations.join('\n'));
+                    } else {
+                        setOutput('Invalid response format. Expected {recommendations: [...]}');
+                    }
+                } catch (e) {
+                    setOutput('Error parsing playlist: ' + data.output);
+                }
             } else {
                 setOutput(`Error: ${data.error}`);
             }
@@ -57,7 +67,7 @@ function Home() {
                 children: "SkateBeatz"
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 41,
+                lineNumber: 51,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -66,7 +76,7 @@ function Home() {
                 children: "Generate Playlist"
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 42,
+                lineNumber: 52,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -74,13 +84,13 @@ function Home() {
                 children: output
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 48,
+                lineNumber: 58,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/page.tsx",
-        lineNumber: 40,
+        lineNumber: 50,
         columnNumber: 5
     }, this);
 }

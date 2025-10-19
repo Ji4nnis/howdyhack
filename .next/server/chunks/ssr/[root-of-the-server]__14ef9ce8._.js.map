@@ -3,5 +3,5 @@
   "sources": [],
   "sections": [
     {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
-    {"offset": {"line": 14, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}}]
+    {"offset": {"line": 15, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/gvale/hh25/howdyhack/src/app/auth/page.tsx"],"sourcesContent":["import { signIn, signOut, useSession } from \"next-auth/react\";\r\nimport NextAuthSessionProvider from \"../providers\";\r\nimport { getServerSession } from \"next-auth/next\";\r\n\r\nexport default function AuthButtons() {\r\n  const { data: session } = getServerSession();\r\n\r\n  return (\r\n      session ? (\r\n      <button onClick={() => signOut()}>Sign out</button>\r\n    ) : (\r\n      <button onClick={() => signIn(\"spotify\")}>Sign in with Spotify</button>\r\n    ) \r\n  );\r\n}\r\n"],"names":[],"mappings":";;;;;AAAA;AAEA;;;;AAEe,SAAS;IACtB,MAAM,EAAE,MAAM,OAAO,EAAE,GAAG,IAAA,wJAAgB;IAE1C,OACI,wBACA,8OAAC;QAAO,SAAS,IAAM,IAAA,gJAAO;kBAAI;;;;;6BAElC,8OAAC;QAAO,SAAS,IAAM,IAAA,+IAAM,EAAC;kBAAY;;;;;;AAGhD","debugId":null}}]
 }
